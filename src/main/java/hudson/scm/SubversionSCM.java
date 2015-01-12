@@ -1343,6 +1343,10 @@ public class SubversionSCM extends SCM implements Serializable {
     public PollingResult compareRemoteRevisionWith(Job<?, ?> project, Launcher launcher, FilePath workspace, final
             TaskListener listener, SCMRevisionState _baseline) throws IOException, InterruptedException {
 
+        if (getDescriptor().suppressPolling) {
+            return PollingResult.NO_CHANGES;
+        }
+
         final SVNRevisionState baseline;
         if (_baseline instanceof SVNRevisionState) {
             baseline = (SVNRevisionState) _baseline;
@@ -1635,6 +1639,7 @@ public class SubversionSCM extends SCM implements Serializable {
          * @since 1.27
          */
         private boolean storeAuthToDisk = true;
+        private boolean suppressPolling = false;
 
         @Override
         public void load() {
@@ -2160,6 +2165,10 @@ public class SubversionSCM extends SCM implements Serializable {
             return validateRemoteUpToVar;
         }
 
+        public boolean isSuppressPolling() {
+            return suppressPolling;
+        }
+
         public boolean isStoreAuthToDisk() {
             return storeAuthToDisk;
         }
@@ -2171,6 +2180,7 @@ public class SubversionSCM extends SCM implements Serializable {
             workspaceFormat = Integer.parseInt(req.getParameter("svn.workspaceFormat"));
             validateRemoteUpToVar = formData.containsKey("validateRemoteUpToVar");
             storeAuthToDisk = formData.containsKey("storeAuthToDisk");
+            suppressPolling = StringUtils.isBlank(req.getParameter("svn.suppressPolling")) ? false : req.getParameter("svn.suppressPolling").equalsIgnoreCase("on");
 
             // Save configuration
             save();
