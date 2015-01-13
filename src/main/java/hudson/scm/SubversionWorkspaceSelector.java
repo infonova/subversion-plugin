@@ -25,6 +25,7 @@ package hudson.scm;
 
 import hudson.model.Hudson;
 import hudson.remoting.Channel;
+import org.jenkinsci.remoting.RoleChecker;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.internal.wc.admin.ISVNAdminAreaFactorySelector;
 import org.tmatesoft.svn.core.internal.wc.admin.SVNAdminArea14;
@@ -110,6 +111,11 @@ public class SubversionWorkspaceSelector implements ISVNAdminAreaFactorySelector
             if (c!=null)    // just being defensive. cannot be null.
                 try {
                     workspaceFormat = c.call(new SlaveToMasterCallable<Integer, RuntimeException>() {
+                        @Override
+                        public void checkRoles(RoleChecker checker) throws SecurityException {
+
+                        }
+
                         private static final long serialVersionUID = 6494337549896104453L;
 
                         public Integer call()  {

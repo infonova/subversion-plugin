@@ -144,6 +144,7 @@ import org.apache.commons.lang.StringUtils;
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.taskdefs.Chmod;
+import org.jenkinsci.remoting.RoleChecker;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.kohsuke.stapler.AncestorInPath;
@@ -982,11 +983,6 @@ public class SubversionSCM extends SCM implements Serializable {
             }
         }
 
-        @Override
-        public void checkRoles(RoleChecker checker) throws SecurityException {
-            checker.check(this, Roles.SLAVE);
-        }
-
         /**
          * This round-about way of executing the task ensures that the error-prone {@link #delegateTo(UpdateTask)} method
          * correctly copies everything.
@@ -1014,6 +1010,11 @@ public class SubversionSCM extends SCM implements Serializable {
         }
 
         private static final long serialVersionUID = 1L;
+
+        @Override
+        public void checkRoles(RoleChecker checker) throws SecurityException {
+
+        }
     }
 
     /**
@@ -1299,6 +1300,11 @@ public class SubversionSCM extends SCM implements Serializable {
             }
         }
         private static final long serialVersionUID = 1L;
+
+        @Override
+        public void checkRoles(RoleChecker checker) throws SecurityException {
+
+        }
     }
 
     /**
@@ -1921,6 +1927,11 @@ public class SubversionSCM extends SCM implements Serializable {
                             // remote
                             // Unsafe in general, but we should have already converted $JENKINS_HOME/subversion-credentials anyway.
                             privateKey = channel.call(new SlaveToMasterCallable<String,IOException>() {
+                                @Override
+                                public void checkRoles(RoleChecker checker) throws SecurityException {
+
+                                }
+
                                 /**
                                  *
                                  */
@@ -2591,7 +2602,7 @@ public class SubversionSCM extends SCM implements Serializable {
             }
         return false;
     }
-    
+
     /**
      * Disables the project if it is possible and prints messages to the log.
      * @param project Project to be disabled

@@ -33,6 +33,7 @@ import hudson.remoting.VirtualChannel;
 import hudson.FilePath.FileCallable;
 import hudson.model.Run;
 import hudson.model.TaskListener;
+import org.jenkinsci.remoting.RoleChecker;
 import org.kohsuke.accmod.Restricted;
 import org.kohsuke.accmod.restrictions.NoExternalUse;
 import org.tmatesoft.svn.core.SVNException;
@@ -276,6 +277,11 @@ public final class SubversionChangeLogBuilder {
         }
 
         private static final long serialVersionUID = 1L;
+
+        @Override
+        public void checkRoles(RoleChecker checker) throws SecurityException {
+
+        }
     }
 
     /**

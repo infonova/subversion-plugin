@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 import jenkins.security.MasterToSlaveCallable;
 
+import org.jenkinsci.remoting.RoleChecker;
 import org.tmatesoft.svn.core.SVNException;
 import org.tmatesoft.svn.core.SVNURL;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationProvider;
@@ -94,5 +95,10 @@ final class CompareAgainstBaselineCallable extends MasterToSlaveCallable<Polling
         assert revs.size()== baseline.revisions.size();
         return new PollingResult(baseline,new SVNRevisionState(revs),
                 significantChanges ? Change.SIGNIFICANT : changes ? Change.INSIGNIFICANT : Change.NONE);
+    }
+
+    @Override
+    public void checkRoles(RoleChecker checker) throws SecurityException {
+
     }
 }
